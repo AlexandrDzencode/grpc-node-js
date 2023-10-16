@@ -1,4 +1,5 @@
 const grpc = require("@grpc/grpc-js");
+const fs = require("fs");
 const { GreetServiceClient } = require("../proto/greet_grpc_pb");
 const { GreetRequest } = require("../proto/greet_pb");
 
@@ -48,13 +49,61 @@ function doLongGreet(client) {
   call.end();
 }
 
+function doGreetEveryone(client) {
+  console.log("doGreetEveryone was invoked");
+
+  const names = ["Audi", "BMW", "LANOS WROOM_WROOM"];
+  const call = client.greetEveryone();
+
+  call.on("data", (res) => {
+    console.log(`GreetEveryone: ${res.getResult()}`);
+  });
+
+  names
+    .map((name) => {
+      return new GreetRequest().setFirstName(name);
+    })
+    .forEach((req) => call.write(req));
+  call.end();
+}
+
+function doGreetWithDeadline(client, ms) {
+  console.log("doGreetWithDeadline was invoked");
+
+  const req = new GreetRequest().setFirstName("Ahhoy");
+
+  client.greetWithDeadline(
+    req,
+    {
+      deadline: new Date(Date.now() + ms),
+    },
+    (err, res) => {
+      if (err) {
+        return console.log(err);
+      }
+
+      console.log(`GreetWithDeadline: ${res.getResult()}`);
+    }
+  );
+}
+
 function main() {
-  const creds = grpc.ChannelCredentials.createInsecure();
+  const tsl = false;
+  let creds;
+
+  if (tsl) {
+    const rootCert = fs.readFileSync("./ssl/ca.crt");
+    creds = grpc.ChannelCredentials.createSsl(rootCert);
+  } else {
+    creds = grpc.ChannelCredentials.createInsecure();
+  }
   const client = new GreetServiceClient("localhost:50051", creds);
 
-  // doGreet(client);
+  doGreet(client);
   // doGreetManyTimes(client);
-  doLongGreet(client);
+  // doLongGreet(client);
+  // doGreetEveryone(client);
+  // doGreetWithDeadline(client, 5000);
   client.close();
 }
 

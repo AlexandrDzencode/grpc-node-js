@@ -61,6 +61,28 @@ var GreetServiceService = exports.GreetServiceService = {
     responseSerialize: serialize_greet_GreetResponse,
     responseDeserialize: deserialize_greet_GreetResponse,
   },
+  greetEveryone: {
+    path: '/greet.GreetService/GreetEveryone',
+    requestStream: true,
+    responseStream: true,
+    requestType: greet_pb.GreetRequest,
+    responseType: greet_pb.GreetResponse,
+    requestSerialize: serialize_greet_GreetRequest,
+    requestDeserialize: deserialize_greet_GreetRequest,
+    responseSerialize: serialize_greet_GreetResponse,
+    responseDeserialize: deserialize_greet_GreetResponse,
+  },
+  greetWithDeadline: {
+    path: '/greet.GreetService/GreetWithDeadline',
+    requestStream: false,
+    responseStream: false,
+    requestType: greet_pb.GreetRequest,
+    responseType: greet_pb.GreetResponse,
+    requestSerialize: serialize_greet_GreetRequest,
+    requestDeserialize: deserialize_greet_GreetRequest,
+    responseSerialize: serialize_greet_GreetResponse,
+    responseDeserialize: deserialize_greet_GreetResponse,
+  },
 };
 
 exports.GreetServiceClient = grpc.makeGenericClientConstructor(GreetServiceService);

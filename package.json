@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pb:win:gen": "powershell -ExecutionPolicy unrestricted ./scripts/gen.ps1 greet calculator",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "ssl:win:gen": "cd ssl && powershell -ExecutionPolicy unrestricted ../scripts/ssl.ps1 && cd ..",
     "greet:server": "node greet/server/index.js",
     "greet:client": "node greet/client/index.js",
     "calculator:server": "node calculator/server/index.js",

@@ -35,3 +35,36 @@ exports.longGreet = (call, callback) => {
     callback(null, res);
   });
 };
+
+exports.greetEveryone = (call, _) => {
+  console.log("GreetEveryone was invoked");
+
+  call.on("data", (req) => {
+    console.log(`received requst ${req}`);
+    const res = new pb.GreetResponse().setResult(`Hello ${req.getFirstName()}`);
+
+    console.log(`Sending response ${res}`);
+    call.write(res);
+  });
+
+  call.on("end", () => call.end());
+};
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+exports.greetWithDeadline = async (call, callback) => {
+  console.log("GreetWithDeadline was invoked");
+
+  for (let i = 0; i < 3; ++i) {
+    if (call.cacelled) {
+      return console.log("The client cancelled the request");
+    }
+    await sleep(1000);
+  }
+
+  const res = new pb.GreetResponse().setResult(
+    `Hello ${call.request.getFirstName()}`
+  );
+
+  callback(null, res);
+};
