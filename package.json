@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pb:win:gen": "powershell -ExecutionPolicy unrestricted ./scripts/gen.ps1 greet calculator",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "greet:server": "node greet/server/index.js",
+    "greet:client": "node greet/client/index.js",
+    "calculator:server": "node calculator/server/index.js",
+    "calculator:client": "node calculator/client/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,10 +23,10 @@
   },
   "homepage": "https://github.com/AlexandrDzencode/grpc-node-js#readme",
   "dependencies": {
-    "@grpc/grpc-js": "^1.9.5",
+    "@grpc/grpc-js": "^1.8.12",
     "google-protobuf": "^3.21.2"
   },
   "devDependencies": {
-    "grpc-tools": "^1.12.4"
+    "grpc-tools": "^1.11.3"
   }
 }
